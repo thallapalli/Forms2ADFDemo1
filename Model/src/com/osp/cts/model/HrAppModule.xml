@@ -7,8 +7,29 @@
   Version="12.2.1.9.14"
   InheritPersonalization="merge"
   ClearCacheOnRollback="true"
-  ComponentClass="com.osp.cts.model.HrAppModuleImpl">
+  ComponentClass="com.osp.cts.model.HrAppModuleImpl"
+  ComponentInterface="com.osp.cts.model.common.HrAppModule">
   <DesignTime>
     <Attr Name="_isCodegen" Value="true"/>
   </DesignTime>
+  <ViewUsage
+    Name="EmployeesROVO1"
+    ViewObjectName="com.osp.cts.model.queries.EmployeesROVO">
+    <ViewCriteriaUsage
+      Name="EmployeesByDeptId"
+      FullName="com.osp.cts.model.queries.EmployeesROVO.EmployeesByDeptId"/>
+  </ViewUsage>
+  <ClientInterface
+    Name="__clientInterface">
+    <Method
+      Name="getHrReport"
+      MethodName="getHrReport">
+      <Return
+        Name="_return_type_"
+        Type="byte[]"/>
+      <Parameter
+        Name="deptId"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
 </AppModule>

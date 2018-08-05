@@ -4,16 +4,59 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <f:view>
         <af:document title="index1.jspx" id="d1">
+            <af:messages id="m1"/>
             <af:form id="f1">
+                <af:resource type="javascript">
+                  function customHandler(event) {
+
+                      var component = AdfPage.PAGE.findComponent(event);
+                      var actionEvent = new AdfActionEvent(component);
+                      actionEvent.queue();
+
+                  }
+
+                  //inline script to avoid taskflow bug
+                  function onEnterKey(inputevent) {
+                      if (inputevent.getKeyCode() == AdfKeyStroke.ENTER_KEY) {
+
+                          var inputTextId = inputevent.getSource();
+                          var reportbtn = inputTextId.findComponent('cb2');
+
+                          AdfActionEvent.queue(reportbtn);
+                          inputevent.cancel();
+                      }
+                  }
+                </af:resource>
                 <af:pageTemplate viewId="/oracle/templates/threeColumnTemplate.jspx" id="pt1">
                     <f:facet name="center">
                         <af:panelTabbed position="above" id="pt2">
                             <af:showDetailItem id="tab1" text="Form1"/>
-                            <af:showDetailItem id="tab2" text="Form2"/>
+                            <af:showDetailItem id="tab2" text="Form2">
+                                <af:inputText value="#{bindings.DepartmentId.inputValue}"
+                                              required="#{bindings.DepartmentId.hints.mandatory}"
+                                              columns="#{bindings.DepartmentId.hints.displayWidth}"
+                                              maximumLength="#{bindings.DepartmentId.hints.precision}"
+                                              shortDesc="#{bindings.DepartmentId.hints.tooltip}" id="it1">
+                                    <f:validator binding="#{bindings.DepartmentId.validator}"/>
+                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.DepartmentId.format}"/>
+                                </af:inputText>
+                            </af:showDetailItem>
                             <af:showDetailItem id="tab3" text="BI Report">
+                                <af:panelGroupLayout id="pgl1">
                                 <af:button text="Generate Report" id="b1">
                                     <af:showPopupBehavior triggerType="click" popupId="p1" align="overlap"/>
                                 </af:button>
+                                <af:spacer height="10" width="10"/>
+                                <af:button text="Download Report" id="cb2" clientComponent="true"
+                                           action="#{backingBeanScope.IndexBacking.onGenerateReport}"/>
+                                <af:button text="Download Report Hidden" id="cb1"
+                                           binding="#{backingBeanScope.IndexBacking.cb1}" clientComponent="true"
+                                           visible="false">
+                                    <af:fileDownloadActionListener method="#{backingBeanScope.IndexBacking.HrReport}"
+                                                                   contentType="application/pdf" filename="hr.pdf"/>
+                                </af:button>
+                           
+                               </af:panelGroupLayout>
                                 <af:popup childCreation="deferred" autoCancel="disabled" id="p1">
                                     <af:dialog>
                                         <af:inlineFrame id="if1" shortDesc="This is an inline frame"
@@ -23,6 +66,9 @@
                                 </af:popup>
                             </af:showDetailItem>
                         </af:panelTabbed>
+                    </f:facet>
+                    <f:facet name="header">
+                    <af:outputText value="Forms2ADF Demo"/>
                     </f:facet>
                 </af:pageTemplate>
             </af:form>
