@@ -27,7 +27,7 @@ public class GeneratePDF extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get requested file by path info.
            
-        String requestedFile="checklist.pdf";
+        String requestedFile="checklist.pdf";//test
 
             // I want to invoke a pdf that is located on the machine where the application is running
             this.filePath =
